@@ -7,6 +7,8 @@ editor: visual
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+** TASK1: Load the "iris" dataset and transform it to longer.**
+
 
 **Installing and loading packages:**
 
@@ -28,7 +30,7 @@ library(dplyr)
 data("iris")
 ```
 
-**Using pivot_longer function I transformed the table:**
+**Using pivot_longer function I transformed the table to the longer format:**
 
 ```{r}
 iris_long<-iris %>%
@@ -36,11 +38,13 @@ iris_long<-iris %>%
                names_to="traits",
                values_to="size")
 head(iris_long)
-wiev(iris_long)
+view(iris_long)
 ```
 
 **The "-Species" makes it so that previous columns as "sepal.length" become rows and table is transformed into longer format.**
+**task2:What is the mean, length and width of the
 
+sepal and petal of each species?**
 **Then I separated Trait column to get sepal and petal and length and width. And using "group_by" and "summarise" commands I calculated mean for both species for width and length:**
 
 ```{r}
