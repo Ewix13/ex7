@@ -1,0 +1,80 @@
+---
+title: "ewiczka7"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+**Installing and loading packages:**
+
+```{r}
+install.packages("tidyr")
+install.packages("dplyr")
+install.packages("readr")
+```
+
+```{r}
+library(tidyr)
+library(readr)
+library(dplyr)
+```
+
+**I loaded needed files:**
+
+```{r}
+data("iris")
+```
+
+**Using pivot_longer function I transformed the table:**
+
+```{r}
+iris_long<-iris %>%
+  pivot_longer(cols=-Species,
+               names_to="traits",
+               values_to="size")
+head(iris_long)
+wiev(iris_long)
+```
+
+**The "-Species" makes it so that previous columns as "sepal.length" become rows and table is transformed into longer format.**
+
+**Then I separated Trait column to get sepal and petal and length and width. And using "group_by" and "summarise" commands I calculated mean for both species for width and length:**
+
+```{r}
+
+iris_long %>%
+  separate("traits", into=c("part", "measure"), sep="\\.") %>%
+  group_by(Species,part,measure)%>%
+  summarise(mean_size=mean(size))
+```
+
+**In separate function we divide trait column into two new columns: part (sepal or petal) and measure( width or length) , than we group data by species part and measure. And by summarise we calculate mean in every group.**
+
+**Finding largest and widest,  petal and sepal, of virginica and versicolor species:**
+
+```{r}
+iris_long %>%
+  filter(Species %in% c("virginica", "versicolor")) %>%
+  separate(traits, into=c("part", "measure"), sep="\\.") %>%
+  group_by(Species, part, measure)%>%
+  summarise(max_size=max(size), .groups="drop")
+```
+
+Firstly I filtered the data by filter function, so that only "virginica" and "versicolor" species are looked into, then by **In separate function we divide trait column into two new columns: part (sepal or petal) and measure( width or length) , than we group data by species part and measure, then by summarise we get what we are looking for.**, .groups="drop" is used to delete the gruping
+
+For each species, for sepal and petal width and length,
+
+how many observations are above the mean
+
+seperate group by then mutate to calculate mean for each group,then in summarise to ab_mean are written how many times size\> mean size and by sum summing them
+
+```{r}
+iris_long %>%
+separate(traits, into = c("part", "measure"), sep = "\\.") %>%
+group_by(Species, part, measure) %>%
+mutate(mean_size = mean(size)) %>%
+summarise(ab_mean = sum(size > mean_size), .groups = "drop")
+```
